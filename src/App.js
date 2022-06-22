@@ -23,11 +23,17 @@ const App = () => {
     const newTaskData = taskData.map((task) => {
       const newTask = { ...task };
       if (newTask.id === id) {
-        newTask.isComplete ? true : false;
+        newTask.isComplete = !newTask.isComplete;
       }
       return newTask;
     });
     setTaskData(newTaskData);
+  };
+
+  const deleteTask = (id) => {
+    console.log('deleted', id);
+    const completedTasks = taskData.filter((task) => task.id !== id);
+    setTaskData(completedTasks);
   };
 
   return (
@@ -37,7 +43,11 @@ const App = () => {
       </header>
       <main>
         <div>
-          <TaskList tasks={taskData} updateMakeComplete={setCompleteTask} />
+          <TaskList
+            tasks={taskData}
+            updateMakeComplete={setCompleteTask}
+            updateDeletedTask={deleteTask}
+          />
         </div>
       </main>
     </div>
