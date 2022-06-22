@@ -31,6 +31,7 @@ const Task = (props) => {
 
       <button
         className="tasks__item__remove button"
+        data-testid={`delete button ${taskId}`}
         onClick={() => deleteTask()}
       >
         x
