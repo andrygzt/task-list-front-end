@@ -32,11 +32,14 @@ const App = () => {
   }, []);
 
   const setCompleteTask = (id) => {
+    let targetTask;
+
     console.log('when complete', id);
     const newTaskData = taskData.map((task) => {
       const newTask = { ...task };
       if (newTask.id === id) {
-        newTask.isComplete = !newTask.isComplete;
+        targetTask = task;
+        // newTask.isComplete = !newTask.isComplete;
       }
       return newTask;
     });
