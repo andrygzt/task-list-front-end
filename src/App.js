@@ -32,18 +32,31 @@ const App = () => {
   }, []);
 
   const setCompleteTask = (id) => {
+    console.log('when complete', id);
+
     let targetTask;
 
-    console.log('when complete', id);
     const newTaskData = taskData.map((task) => {
       const newTask = { ...task };
-      if (newTask.id === id) {
+      if (newTask.taskId === id) {
         targetTask = task;
-        // newTask.isComplete = !newTask.isComplete;
       }
+
       return newTask;
     });
-    setTaskData(newTaskData);
+    axios.patch(
+      `https://task-list-api-c17.herokuapp.com/tasks/${targetTask.id}`
+    ),
+      {
+        isComplete: targetTask.isComplete,
+      }
+        .then((response) => {
+          targetTask.isComplete = !targetTask.isComplete;
+          setTaskData(newTaskData);
+        })
+        .catch((error) => {
+          console.log('Errrrror');
+        });
   };
 
   const deleteTask = (id) => {
