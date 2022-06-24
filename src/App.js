@@ -3,6 +3,7 @@ import TaskList from './components/TaskList.js';
 import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import TaskForm from './components/TaskForm';
 
 // const TASKS = [
 //   {
@@ -75,6 +76,25 @@ const App = () => {
       });
   };
 
+  const addTask = ({ title, isComplete }) => {
+    axios
+      .post('https://task-list-api-c17.herokuapp.com/tasks', {
+        title,
+        completed: isComplete ? new Date() : null,
+        description: '',
+      })
+      .then((response) => {
+        const newTask = {
+          id: response.data.task.id,
+          title: response.data.task.title,
+          isComplete: response.data.task.isComplete,
+        };
+        setTaskData([...taskData, newTask]);
+      })
+      .catch((error) => {
+        console.log('error');
+      });
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -91,6 +111,9 @@ const App = () => {
               updateDeletedTask={deleteTask}
             />
           )}
+        </div>
+        <div>
+          <TaskForm onAddTaskCallBack={addTask} />
         </div>
       </main>
     </div>
