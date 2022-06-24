@@ -12,6 +12,7 @@ const Task = (props) => {
   const updateMakeComplete = props.updateMakeComplete;
   const updateDeletedTask = props.updateDeletedTask;
 
+  console.log(props);
   const makeComplete = () => {
     updateMakeComplete(taskId);
   };

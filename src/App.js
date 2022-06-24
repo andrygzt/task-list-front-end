@@ -38,25 +38,27 @@ const App = () => {
 
     const newTaskData = taskData.map((task) => {
       const newTask = { ...task };
-      if (newTask.taskId === id) {
+      if (newTask.id === id) {
         targetTask = task;
+        console.log(targetTask);
       }
 
       return newTask;
     });
-    axios.patch(
-      `https://task-list-api-c17.herokuapp.com/tasks/${targetTask.id}`
-    ),
-      {
-        isComplete: targetTask.isComplete,
-      }
-        .then((response) => {
-          targetTask.isComplete = !targetTask.isComplete;
-          setTaskData(newTaskData);
-        })
-        .catch((error) => {
-          console.log('Errrrror');
-        });
+    axios
+      .patch(
+        `https://task-list-api-c17.herokuapp.com/tasks/${targetTask.id}/mark_complete`,
+        {
+          isComplete: targetTask.isComplete,
+        }
+      )
+      .then((response) => {
+        targetTask.isComplete = !targetTask.isComplete;
+        setTaskData(newTaskData);
+      })
+      .catch((error) => {
+        console.log('Errrrror');
+      });
   };
 
   const deleteTask = (id) => {
