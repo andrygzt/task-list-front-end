@@ -63,9 +63,16 @@ const App = () => {
   };
 
   const deleteTask = (id) => {
-    console.log('deleted', id);
-    const completedTasks = taskData.filter((task) => task.id !== id);
-    setTaskData(completedTasks);
+    axios
+      .delete(`https://task-list-api-c17.herokuapp.com/tasks/${id}`)
+      .then(() => {
+        const deletedTasks = taskData.filter((task) => task.id !== id);
+        console.log('deleted', id);
+        setTaskData(deletedTasks);
+      })
+      .catch((error) => {
+        console.log('errrrrrror');
+      });
   };
 
   return (
