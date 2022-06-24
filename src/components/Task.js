@@ -5,20 +5,20 @@ import './Task.css';
 // const Task = ({ id, title, isComplete }) => {
 
 const Task = (props) => {
-  const taskId = props.id;
-  const taskTitle = props.title;
-  const taskComplete = props.isComplete;
-  const buttonClass = taskComplete ? 'tasks__item__toggle--completed' : '';
+  const id = props.id;
+  const title = props.title;
+  const isComplete = props.isComplete;
+  const buttonClass = isComplete ? 'tasks__item__toggle--completed' : '';
   const updateMakeComplete = props.updateMakeComplete;
   const updateDeletedTask = props.updateDeletedTask;
 
   console.log(props);
   const makeComplete = () => {
-    updateMakeComplete(taskId);
+    updateMakeComplete(id);
   };
 
   const deleteTask = () => {
-    updateDeletedTask(taskId);
+    updateDeletedTask(id);
   };
 
   return (
@@ -27,12 +27,12 @@ const Task = (props) => {
         className={`tasks__item__toggle ${buttonClass}`}
         onClick={() => makeComplete()}
       >
-        {taskTitle}
+        {title}
       </button>
 
       <button
         className="tasks__item__remove button"
-        data-testid={`delete button ${taskId}`}
+        data-testid={`delete button ${id}`}
         onClick={() => deleteTask()}
       >
         x

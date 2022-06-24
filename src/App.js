@@ -19,12 +19,21 @@ import axios from 'axios';
 
 const App = () => {
   const [taskData, setTaskData] = useState([]);
+  const [status, setStatus] = useState('temp');
 
   useEffect(() => {
     axios
       .get('https://task-list-api-c17.herokuapp.com/tasks')
       .then((response) => {
-        setTaskData(response.data);
+        const newTasks = response.data.map((task) => {
+          return {
+            id: task.id,
+            title: task.title,
+            isComplete: task.isComplete,
+          };
+        });
+        setStatus('done');
+        setTaskData(newTasks);
       })
       .catch((error) => {
         console.log('error');
@@ -34,31 +43,23 @@ const App = () => {
   const setCompleteTask = (id) => {
     console.log('when complete', id);
 
-    let targetTask;
-
     const newTaskData = taskData.map((task) => {
-      const newTask = { ...task };
-      if (newTask.id === id) {
-        targetTask = task;
-        console.log(targetTask);
-      }
-
-      return newTask;
-    });
-    axios
-      .patch(
-        `https://task-list-api-c17.herokuapp.com/tasks/${targetTask.id}/mark_complete`,
-        {
-          isComplete: targetTask.isComplete,
+      if (task.id === id) {
+        task.isComplete = !task.isComplete;
+        let targetTask = 'mark_complete';
+        if (!task.isComplete) {
+          targetTask = 'mark_incomplete';
         }
-      )
-      .then((response) => {
-        targetTask.isComplete = !targetTask.isComplete;
-        setTaskData(newTaskData);
-      })
-      .catch((error) => {
-        console.log('Errrrror');
-      });
+
+        axios
+          .patch(
+            `https://task-list-api-c17.herokuapp.com/tasks/${id}/${targetTask}`
+          )
+          .then(() => setTaskData(newTaskData))
+          .catch((error) => console.log('Errrrror'));
+      }
+      return task;
+    });
   };
 
   const deleteTask = (id) => {
@@ -74,11 +75,15 @@ const App = () => {
       </header>
       <main>
         <div>
-          <TaskList
-            tasks={taskData}
-            updateMakeComplete={setCompleteTask}
-            updateDeletedTask={deleteTask}
-          />
+          {status === 'temp' ? (
+            `${status}`
+          ) : (
+            <TaskList
+              tasks={taskData}
+              updateMakeComplete={setCompleteTask}
+              updateDeletedTask={deleteTask}
+            />
+          )}
         </div>
       </main>
     </div>
